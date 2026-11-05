@@ -540,7 +540,7 @@
       {id:11, sender:'马超', subject:'关于开展质量管理培训的通知', summary:'质量管理专题培训定于本周五下午举行，请相关人员准时参加。', time:'2026-09-10 16:42', unread:true, starred:false, important:false, attachment:true}
     ];
     let sent = [
-      {to:'李四、王五、赵六等45人', subject:'关于提交第三季度工作总结的通知', summary:'请各部门于本周五前提交第三季度工作总结。', attachment:true, time:'2026-09-15 10:18', readCount:38, unreadCount:7, recalledCount:0},
+      {to:'李四、王五、赵六等45人', subject:'关于提交第三季度工作总结的通知', summary:'请各部门于本周五前提交第三季度工作总结。', attachment:true, time:'2026-09-15 10:18', readCount:38, unreadCount:0, recalledCount:7, recallDetails:[{name:'李四',result:'撤回成功',time:'2026-09-15 10:19'},{name:'王五',result:'撤回成功',time:'2026-09-15 10:19'},{name:'赵六等 5 人',result:'撤回成功',time:'2026-09-15 10:20'}]},
       {to:'工程管理部相关人员等18人', subject:'项目检查资料补充说明', summary:'补充说明详见正文及附件。', attachment:true, time:'2026-09-14 14:06', readCount:18, unreadCount:0, recalledCount:0},
       {to:'孙七、周八等8人', subject:'下周例会安排', summary:'会议时间调整至下周二上午九点。', attachment:false, time:'2026-09-13 09:25', readCount:6, unreadCount:2, recalledCount:0}
     ];
@@ -595,9 +595,9 @@
       openModal('simpleModal');
     }
     function sentReadSummary(mail) {
-      const parts = [`已读${mail.readCount}`, `未读${mail.unreadCount}`];
-      if (mail.recalledCount) parts.push(`已撤回${mail.recalledCount}`);
-      return parts.join(' / ');
+      const parts = [`已读 ${mail.readCount}`, `未读 ${mail.unreadCount}`];
+      if (mail.recalledCount) parts.push(`已撤回 ${mail.recalledCount}`);
+      return parts.join(' · ');
     }
     function nowText() { return new Date().toISOString().slice(0,16).replace('T',' '); }
     function folderLabel(kind) { return {inbox:'收件箱', sent:'已发送', drafts:'草稿箱', pending:'待发送'}[kind] || '收件箱'; }
@@ -647,11 +647,19 @@
         onConfirm:()=>{
           mail.recalledCount += recallCount;
           mail.unreadCount = 0;
+          mail.recallDetails = mail.recallDetails || [{name:'孙七',result:'撤回成功',time:nowText()},{name:'周八',result:'撤回成功',time:nowText()}];
           if (returnToDetail) renderDetail(mail, true, index, false, returnView);
           else renderSpecialList('sent');
           showToast(`已向${recallCount}名未读收件人撤回，${mail.readCount}名已读收件人保留原邮件`);
         }
       });
+    }
+    function openRecallReport(index) {
+      const mail = sent[index];
+      if (!mail) return;
+      const recalled = mail.recalledCount || 0;
+      const rows = (mail.recallDetails || []).map(item=>`<tr><td>${item.name}</td><td><span class="recalled-mark">${item.result}</span></td><td>${item.time}</td></tr>`).join('') || `<tr><td colspan="3" style="color:#70849c">暂无可展示的收件人级撤回明细</td></tr>`;
+      openSimpleDialog('撤回报告', `<p style="margin-top:0;color:#526b84">${mail.subject}</p><div class="recall-result"><div><strong>撤回结果：${recalled ? '部分成功' : '未撤回'}</strong><span>已读 ${mail.readCount} 人 · 未读 ${mail.unreadCount} 人 · 已撤回 ${recalled} 人</span></div></div><div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>收件人</th><th>撤回结果</th><th>处理时间</th></tr></thead><tbody>${rows}</tbody></table></div><p style="margin-bottom:0;color:#70849c;font-size:13px">已读收件人保留原邮件；撤回成功的收件人仅保留系统提示记录。</p>`, {confirmText:'关闭',onConfirm:()=>{}});
     }
 
     function listRecords(view) {
@@ -719,8 +727,8 @@
       let header = '', rows = '', total = 0;
       if (view === 'sent') {
         total = sent.length;
-        header = '<tr><th class="check-cell"><input type="checkbox"></th><th style="width:225px">收件人</th><th style="width:300px">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th style="width:190px">阅读情况</th><th class="time-cell">发送时间</th><th style="width:92px">操作</th></tr>';
-        rows = sent.map((m,i)=>`<tr data-sent="${i}"><td class="check-cell"><input type="checkbox" onclick="event.stopPropagation()"></td><td>${m.to}</td><td><span class="mail-subject">${m.subject}</span></td><td><div class="mail-summary">${m.summary}</div></td><td class="attach-cell">${m.attachment?icon('i-paperclip'):''}</td><td><button class="btn-link read-detail" data-sent-index="${i}" onclick="event.stopPropagation()">${sentReadSummary(m)}</button></td><td class="time-cell">${m.time}</td><td><button class="btn-link ${m.unreadCount?'btn-danger':''}" data-action="recall" data-sent-index="${i}" ${m.unreadCount?'':'disabled'}>${m.recalledCount?'已撤回':m.unreadCount?'撤回':'不可撤回'}</button></td></tr>`).join('');
+        header = '<tr><th class="check-cell"><input type="checkbox"></th><th style="width:225px">收件人</th><th style="width:300px">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th style="width:220px">送达情况</th><th class="time-cell">发送时间</th><th style="width:108px">操作</th></tr>';
+        rows = sent.map((m,i)=>`<tr data-sent="${i}"><td class="check-cell"><input type="checkbox" onclick="event.stopPropagation()"></td><td>${m.to}</td><td><span class="mail-subject">${m.subject}</span></td><td><div class="mail-summary">${m.summary}</div></td><td class="attach-cell">${m.attachment?icon('i-paperclip'):''}</td><td><button class="btn-link read-detail" data-sent-index="${i}" onclick="event.stopPropagation()">${sentReadSummary(m)}</button></td><td class="time-cell">${m.time}</td><td><button class="btn-link ${m.unreadCount?'btn-danger':''}" data-action="${m.recalledCount?'recall-report':'recall'}" data-sent-index="${i}" ${m.unreadCount||m.recalledCount?'':'disabled'}>${m.recalledCount?'查看报告':m.unreadCount?'撤回':'不可撤回'}</button></td></tr>`).join('');
       } else if (view === 'drafts') {
         total = drafts.length; header = '<tr><th class="check-cell"><input type="checkbox" id="checkAllDrafts" aria-label="全选草稿"></th><th style="width:280px">收件人</th><th style="width:360px">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th class="time-cell">保存时间</th></tr>';
         rows = drafts.map((m,i)=>`<tr data-compose="1"><td class="check-cell"><input type="checkbox" class="draft-check" data-draft-index="${i}" aria-label="选择草稿" onclick="event.stopPropagation()"></td><td ${m.incomplete?'style="color:#8b9aab"':''}>${m.to}</td><td ${m.incomplete?'style="color:#8b9aab"':''}>${m.subject}</td><td><div class="mail-summary">${m.summary}</div></td><td class="attach-cell">${m.attachment?icon('i-paperclip'):''}</td><td class="time-cell">${m.time}</td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">草稿箱为空</div></td></tr>';
@@ -834,14 +842,17 @@
       mainView.innerHTML = `
         <div class="content-header"><div class="page-title">邮件详情</div><div class="mail-total">来源：${sourceName}</div></div>
         <div class="detail">
-          <div class="detail-actions"><button class="btn-link" id="backList">‹ 返回${returnView==='starred'?'星标邮件':sourceName}</button><div class="action-group">${isRecalled?'':isSent?`<button class="btn btn-danger" id="recallDetail" ${mail.unreadCount?'':'disabled'}>${mail.recalledCount?'已撤回':mail.unreadCount?'撤回邮件':'不可撤回'}</button><button class="btn action-compose" data-mode="forward" data-prefix="转发：">${icon('i-forward')}转发</button>`:`<button class="btn btn-primary action-compose" data-mode="reply" data-prefix="回复：">${icon('i-reply')}回复</button><button class="btn action-compose" data-mode="reply" data-prefix="回复：">${icon('i-reply')}回复全部</button><button class="btn action-compose" data-mode="forward" data-prefix="转发：">${icon('i-forward')}转发</button>`}${starControl}${isRecalled?'':`<button class="btn detail-more" id="moreBtn"><span>更多</span><svg class="icon more-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></button>`}</div></div>
+          <div class="detail-actions"><button class="btn-link" id="backList">‹ 返回${returnView==='starred'?'星标邮件':sourceName}</button><div class="action-group">${isRecalled?'':isSent?`${mail.recalledCount?'<button class="btn" id="recallReportDetail">查看撤回报告</button>':`<button class="btn btn-danger" id="recallDetail" ${mail.unreadCount?'':'disabled'}>${mail.unreadCount?'撤回邮件':'不可撤回'}</button>`}<button class="btn action-compose" data-mode="forward" data-prefix="转发：">${icon('i-forward')}转发</button>`:`<button class="btn btn-primary action-compose" data-mode="reply" data-prefix="回复：">${icon('i-reply')}回复</button><button class="btn action-compose" data-mode="reply" data-prefix="回复：">${icon('i-reply')}回复全部</button><button class="btn action-compose" data-mode="forward" data-prefix="转发：">${icon('i-forward')}转发</button>`}${starControl}${isRecalled?'':`<button class="btn detail-more" id="moreBtn"><span>更多</span><svg class="icon more-chevron" aria-hidden="true"><use href="#i-chevron"/></svg></button>`}</div></div>
           <div class="mail-heading"><h2>${isRecalled?'邮件已撤回':mail.subject}</h2></div>
           ${isRecalled ? `<dl class="mail-meta"><dt>发件人：</dt><dd>${mail.sender}</dd><dt>撤回时间：</dt><dd>${mail.time}</dd></dl>` : `<dl class="mail-meta"><dt>发件人：</dt><dd>${mail.sender || '张建军'} &lt;${mail.senderEmail || 'wangjg@ccec.com'}&gt;</dd><dt>收件人：</dt><dd>${isSent?mail.to:'李四、王五、赵六等45人'}　<button class="btn-link people-detail">查看详情</button></dd><dt>抄送人：</dt><dd>钱七、周八等12人　<button class="btn-link people-detail">查看详情</button></dd><dt>发送时间：</dt><dd>${mail.time || '2026-09-15 09:30'}</dd>${isSent?`<dt>送达状态：</dt><dd><span class="recall-status">${sentReadSummary(mail)}</span></dd>`:''}</dl>`}
+          ${isSent && mail.recalledCount ? `<div class="recall-result"><div><strong>撤回结果：部分成功</strong><span>已读 ${mail.readCount} 人 · 未读 ${mail.unreadCount} 人 · 已撤回 ${mail.recalledCount} 人</span></div><button class="btn-link" id="recallReportInline">查看撤回报告</button></div>` : ''}
           ${detailBody}
           ${detailExtras}
         </div>`;
       document.getElementById('backList').addEventListener('click',()=>renderList(isTrash?'trash':returnView));
       document.getElementById('recallDetail')?.addEventListener('click',()=>openRecall(sentIndex, true, returnView));
+      document.getElementById('recallReportDetail')?.addEventListener('click',()=>openRecallReport(sentIndex));
+      document.getElementById('recallReportInline')?.addEventListener('click',()=>openRecallReport(sentIndex));
       mainView.querySelectorAll('.action-compose').forEach(b=>b.addEventListener('click',()=>{
         const isReply=b.dataset.mode==='reply';
         const originalMail={subject:mail.subject.replace(/^(回复：|转发：)/,''), sender:mail.sender || '张建军', time:mail.time || nowText(), body:mail.summary || '', attachmentCount:mail.attachment ? 2 : 0};
@@ -879,6 +890,7 @@
       if (action==='purge') openSimpleDialog('彻底删除','<p>彻底删除后无法恢复，是否继续？</p>',{danger:true,confirmText:'确认删除',onConfirm:()=>{trashMails.splice(index,1); renderSpecialList('trash'); showToast('邮件已彻底删除');}});
       if (action==='cancel-schedule') openSimpleDialog('取消定时发送','<p>取消定时后，该邮件将转为普通草稿。</p>',{confirmText:'确认取消',onConfirm:()=>{const [mail]=pending.splice(index,1); if(mail){delete mail.scheduleAt; mail.time=nowText(); drafts.unshift(mail);} updateCounts(); renderSpecialList('pending'); showToast('已取消定时，邮件已转入草稿箱');}});
       if (action==='recall') openRecall(index);
+      if (action==='recall-report') openRecallReport(index);
     }
 
     function showPortal(initial=false) {
