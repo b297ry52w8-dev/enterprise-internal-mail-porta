@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 25070)
-Total output lines: 942
-
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -230,7 +227,573 @@ Total output lines: 942
     .org-tree { border-right: 1px solid var(--line); padding: 12px; overflow: auto; }
     .org-search, .people-search { height: 38px; border: 1px solid #cfdbe8; display: flex; align-items: center; gap: 7px; padding: 0 10px; margin-bottom: 10px; }
     .org-search input, .people-search input { border: 0; outline: 0; min-width: 0; width: 100%; }
-    .tree-node { min-height: 3…15070 tokens truncated…chip">赵六 <button>×</button></span><span class="person-chip">等45人</span><input aria-label="收件人"></div><button class="btn-link choose-people" data-type="recipient">${icon('i-user')}选择人员</button></div>
+    .tree-node { min-height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 6px; }
+    .tree-node.indent { padding-left: 28px; }
+    .tree-node.active { color: var(--blue); background: var(--blue-soft); }
+    .people-table { padding: 12px; overflow: auto; }
+    .people-table table { table-layout: auto; }
+    .people-table th, .people-table td { height: 40px; border: 1px solid #e2eaf2; padding: 6px 10px; }
+    .people-table tr.disabled { color: #a2adba; background: #fafbfc; cursor: not-allowed; }
+    .risk-info { display: flex; gap: 10px; align-items: center; background: #eaf4ff; color: #1d63a8; padding: 12px 14px; margin-bottom: 16px; }
+    .confirm-list { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px 5px; align-items: start; }
+    .confirm-list dt { font-weight: 700; color: #29486c; }
+    .confirm-list dd { margin: 0; color: #3c5875; }
+    .confirm-list .clickable { color: var(--blue); cursor: pointer; font-weight: 700; }
+    .warning { display: flex; align-items: center; gap: 10px; background: #fff8e9; color: #7a5a23; border: 1px solid #f4d594; padding: 12px 14px; margin-top: 18px; }
+    .toast { position: fixed; z-index: 40; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(31, 57, 84, .94); color: #fff; padding: 10px 18px; border-radius: 3px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+    .toast.show { opacity: 1; }
+    .new-mail-tip { display: none; align-items: center; justify-content: center; height: 36px; color: var(--blue); background: #edf6ff; border: 1px solid #cfe7fc; margin: 0 0 10px; cursor: pointer; }
+    .is-hidden { display: none !important; }
+
+    /* 门户首页 */
+    .portal-dashboard {
+      height: calc(100vh - 94px);
+      min-width: 1280px;
+      padding: 12px;
+      overflow: auto;
+      background: var(--bg);
+    }
+    .portal-row { display: grid; gap: 12px; margin-bottom: 12px; }
+    .portal-row-one { grid-template-columns: minmax(0, 2fr) minmax(380px, 1fr); height: 360px; }
+    .portal-row-two { grid-template-columns: repeat(3, minmax(0, 1fr)); height: 330px; }
+    .portal-row-three { grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: 164px; margin-bottom: 0; }
+    .portal-card { min-width: 0; background: #fff; border: 1px solid #e1e8ef; box-shadow: var(--shadow); overflow: hidden; }
+    .portal-card-head { height: 46px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 15px; border-bottom: 1px solid var(--line-soft); }
+    .portal-card-title { display: flex; align-items: center; gap: 9px; min-width: 0; margin: 0; color: #203f64; font-size: 16px; font-weight: 700; }
+    .portal-card-title::before { content: ""; width: 3px; height: 20px; border-radius: 2px; background: var(--blue); }
+    .portal-title-button, .portal-more { border: 0; background: transparent; color: inherit; padding: 0; }
+    .portal-title-button { font-weight: 700; font-size: inherit; }
+    .portal-title-button:hover, .portal-more:hover { color: var(--blue); }
+    .portal-more { min-height: 28px; display: inline-flex; align-items: center; flex: 0 0 auto; color: #435d78; white-space: nowrap; }
+    .portal-news-body { height: calc(100% - 46px); display: grid; grid-template-columns: 45% minmax(0, 1fr); gap: 12px; padding: 12px 15px; }
+    .photo-viewport { position: relative; height: 100%; overflow: hidden; background: #d8e1e9; }
+    .portal-photo { position: absolute; width: 1923px; max-width: none; height: auto; left: -23px; top: -161px; }
+    .photo-dots { position: absolute; right: 18px; bottom: 12px; display: flex; gap: 7px; }
+    .photo-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.72); }
+    .photo-dots i:first-child { background: #fff; }
+    .portal-list { list-style: none; padding: 0 12px; margin: 0; }
+    .portal-list li { min-height: 53px; border-bottom: 1px solid var(--line-soft); padding: 8px 0; }
+    .portal-list.compact li { min-height: 62px; }
+    .portal-list-main { display: flex; align-items: center; gap: 7px; min-width: 0; color: #223c59; }
+    .portal-bullet { color: #111; font-size: 16px; line-height: 1; }
+    .portal-list-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .portal-date { color: #9aa6b4; white-space: nowrap; font-size: 13px; }
+    .portal-summary { color: #7c8998; margin: 3px 0 0 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .new-label { color: #fff; background: #ff5944; border-radius: 8px; padding: 0 6px; font-size: 10px; font-weight: 700; }
+    .project-list { padding: 0; }
+    .project-row { height: 44px; display: grid; grid-template-columns: 1fr 72px; border-bottom: 1px solid var(--line-soft); }
+    .project-name { display: flex; align-items: center; gap: 9px; padding: 0 14px; min-width: 0; font-weight: 600; color: #273e59; }
+    .project-name::before { content: "◆"; color: var(--blue); font-size: 12px; }
+    .project-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .enter-btn { border: 0; background: var(--blue-strong); color: #fff; }
+    .link-list { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 28px; padding: 18px 16px; }
+    .link-list a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    .quick-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; padding: 14px; }
+    .quick-item { min-height: 56px; border: 1px solid #e0e7ef; background: #fff; display: flex; align-items: center; gap: 9px; padding: 0 12px; color: #37536f; }
+    .quick-icon { color: #2c92e4; font-size: 18px; }
+    .portal-mail-list { padding: 2px 14px 8px; }
+    .portal-mail-row { width: 100%; min-height: 29px; display: grid; grid-template-columns: 20px 76px minmax(0,1fr) 90px; align-items: center; gap: 7px; border: 0; border-bottom: 1px solid var(--line-soft); background: #fff; text-align: left; color: #36516f; padding: 0; }
+    .portal-mail-row:hover { color: var(--blue); background: #f8fbfe; }
+    .portal-mail-row .icon { width: 15px; height: 15px; color: #2491e5; }
+    .portal-mail-subject { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .portal-mail-date { color: #98a3af; text-align: right; }
+
+    @media (max-width: 1180px) {
+      .topnav a:nth-last-child(-n+3) { display: none; }
+      .screen-link, .top-action span:not(.badge) { display: none; }
+      .layout { grid-template-columns: 220px minmax(0, 1fr); }
+      .advanced-panel { grid-template-columns: repeat(3, 1fr); }
+      .subject-cell { width: 260px; }
+      .portal-dashboard { min-width: 1180px; }
+    }
+    @media (max-width: 760px) {
+      body { overflow: hidden; }
+      .topbar { height: auto; min-height: 52px; padding: 8px 12px; }
+      .brand { font-size: 16px; }
+      .topnav { display: none; }
+      .top-actions { margin-left: auto; gap: 12px; }
+      .layout { height: calc(100vh - 94px); min-height: 0; grid-template-columns: 150px minmax(520px, 1fr); gap: 8px; padding: 8px; overflow: auto; }
+      .sidebar { min-height: 0; padding: 12px 7px; overflow-y: auto; position: sticky; left: 0; z-index: 2; }
+      .side-title { display: flex; margin: 0 6px 10px; font-size: 15px; }
+      .side-title::before { height: 20px; }
+      .side-note { display: none; }
+      .menu { grid-template-columns: 1fr; gap: 3px; }
+      .menu-item { height: 42px; padding: 0 9px; justify-content: flex-start; gap: 8px; font-size: 14px; }
+      .menu-item .icon { display: block; width: 16px; height: 16px; }
+      .menu-item .count { display: block; min-width: 16px; }
+      .content-card { min-height: 0; height: 100%; padding: 14px 12px; }
+      .toolbar { align-items: stretch; }
+      .toolbar-spacer { display: none; }
+      .advanced-panel { grid-template-columns: 1fr; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 950px; }
+      .form-row { grid-template-columns: 68px minmax(0, 1fr); }
+      .form-row > .btn-link { grid-column: 2; justify-self: start; }
+      .compose-actions { margin-left: 80px; }
+      .people-layout { grid-template-columns: 1fr; }
+      .org-tree { display: none; }
+      .attachment-card { min-width: 100%; }
+      .detail-body { padding: 16px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="m16.5 3.5 4 4L8 20l-5 1 1-5Z"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 5h16l2 8v6H2v-6Z"/><path d="M2 13h5l2 3h6l2-3h5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 3h6l1 4H8Z"/><path d="m7 7 1 14h8l1-14M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 6v5h-5"/><path d="M18 16a8 8 0 1 1 1-9l1 4"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24"><path d="M8 4v16M5 7l3-3 3 3M16 20V4m-3 13 3 3 3-3"/></symbol>
+    <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="m20 12-8 8a6 6 0 0 1-8-8l9-9a4 4 0 0 1 6 6l-9 9a2 2 0 0 1-3-3l8-8"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 5"/></symbol>
+    <symbol id="i-reply" viewBox="0 0 24 24"><path d="m9 7-6 5 6 5v-3h5a7 7 0 0 1 7 7v-4a8 8 0 0 0-8-8H9Z"/></symbol>
+    <symbol id="i-forward" viewBox="0 0 24 24"><path d="m15 7 6 5-6 5v-3h-5a7 7 0 0 0-7 7v-4a8 8 0 0 1 8-8h4Z"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">CRCC</span><span>企业协同工作台</span></div>
+    <nav class="topnav" aria-label="主导航">
+      <a href="#" class="active">门户</a><a href="#">市场经营</a><a href="#">工程管理</a><a href="#">人力资源</a><a href="#">财务管理</a><a href="#">采购供应</a><a href="#">入证档案</a><a href="#">大数据资源</a>
+    </nav>
+    <div class="top-actions">
+      <span class="screen-link">数字大屏</span>
+      <button class="top-action" id="topMail"><svg class="icon"><use href="#i-mail"/></svg><span>邮箱</span><b class="badge" id="topBadge">8</b></button>
+      <button class="top-action"><svg class="icon"><use href="#i-info"/></svg><span>提醒</span><b class="badge">8</b></button>
+      <button class="top-action"><svg class="icon"><use href="#i-clock"/></svg><span>待办</span><b class="badge">32</b></button>
+      <span class="avatar">张</span><span>张建军</span>
+    </div>
+  </header>
+  <div class="subbar">
+    <div class="tab-strip"><span class="collapse">≪</span><button class="portal-tab active-sub" id="portalTab">门户</button><div class="mail-tab is-hidden" id="mailTab"><button class="mail-tab-open" id="mailTabOpen">内部邮件</button><button class="mail-tab-close" id="mailTabClose" aria-label="关闭内部邮件">×</button></div></div>
+    <div class="sub-actions"><button aria-label="收起">≫</button><button aria-label="刷新">↻</button><button aria-label="更多">•••</button></div>
+  </div>
+
+  <section class="portal-dashboard" id="portalDashboard">
+    <div class="portal-row portal-row-one">
+      <article class="portal-card">
+        <div class="portal-card-head"><h2 class="portal-card-title">公司新闻</h2><button class="portal-more">更多 ›</button></div>
+        <div class="portal-news-body">
+          <div class="photo-viewport" aria-label="公司新闻图片"><img class="portal-photo" src="portal-reference.png" alt="公司活动合影"><span class="photo-dots"><i></i><i></i><i></i><i></i></span></div>
+          <ul class="portal-list">
+            <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">监理公司员工在铁道协会清华研修班中取得佳绩</span><span class="new-label">NEW</span><time class="portal-date">2026-08-20</time></div><p class="portal-summary">8月18日，中国铁道工程建设协会联合清华大学举办的新时代铁路建设行业教育培训项目圆满完成。</p></li>
+            <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">深耕一线督导赋能 严把项目建设关口</span><span class="new-label">NEW</span><time class="portal-date">2026-08-03</time></div><p class="portal-summary">公司总经理带队深入重点项目施工监理现场，开展专项检查。</p></li>
+            <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">对标前沿强本领 红色铸魂促发展</span><span class="new-label">NEW</span><time class="portal-date">2026-07-27</time></div><p class="portal-summary">推动监理服务转型升级，持续提升项目管理能力。</p></li>
+            <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">扎根高原勇担当 履职交出实在成效</span><time class="portal-date">2026-07-06</time></div><p class="portal-summary">项目部凭借扎实履职成效获得建设单位充分肯定。</p></li>
+            <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">党委书记赴重点项目检查督导</span><time class="portal-date">2026-06-20</time></div><p class="portal-summary">对现场质量、安全、进度和标准化建设进行全面检查。</p></li>
+          </ul>
+        </div>
+      </article>
+      <article class="portal-card">
+        <div class="portal-card-head"><h2 class="portal-card-title">我的项目</h2><button class="portal-more">更多 ›</button></div>
+        <div class="project-list">
+          <div class="project-row"><div class="project-name"><span>鄂州花湖机场铁路联络线项目施工监理HHJL-1标段</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>新建长沙至赣州高速铁路江西段</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>新建长沙至赣州高速铁路湖南段工程施工监理</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>新建温州至福州高速铁路（福建段）监理</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>新建温州至福州高速铁路浙江段站前及相关工程</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>北京市郊铁路东北环线工程</span></div><button class="enter-btn">进入</button></div>
+          <div class="project-row"><div class="project-name"><span>北京轨道交通19号线二期工程土建施工监理</span></div><button class="enter-btn">进入</button></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="portal-row portal-row-two">
+      <article class="portal-card">
+        <div class="portal-card-head"><h2 class="portal-card-title">公司荣誉</h2><button class="portal-more">更多 ›</button></div>
+        <ul class="portal-list compact">
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于表彰2025年度文明创建先进典型的决定</span><span class="new-label">NEW</span><time class="portal-date">2026-02-12</time></div><p class="portal-summary">公司所属各部门、测试所、机电事业部、分公司、监理部。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于表彰2024年度文明创建先进典型的决定</span><span class="new-label">NEW</span><time class="portal-date">2025-03-04</time></div><p class="portal-summary">面对激烈的市场竞争，公司上下坚持实干担当。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于表彰第二届金牌总监、十佳青年的决定</span><span class="new-label">NEW</span><time class="portal-date">2025-03-03</time></div><p class="portal-summary">为更好地表彰专业技术拔尖、工作表现突出的优秀员工。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于表彰2023年度文明创建先进典型的决定</span><time class="portal-date">2024-03-12</time></div><p class="portal-summary">深入学习贯彻企业高质量发展要求。</p></li>
+        </ul>
+      </article>
+      <article class="portal-card">
+        <div class="portal-card-head"><h2 class="portal-card-title">项目风采</h2><button class="portal-more">更多 ›</button></div>
+        <ul class="portal-list compact">
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">监理公司北京地铁项目履约考评第一</span><span class="new-label">NEW</span><time class="portal-date">2026-09-01</time></div><p class="portal-summary">合同履约评价考核结果中获得优异成绩。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">高原铁路列大桥完成首节钢梁吊装</span><span class="new-label">NEW</span><time class="portal-date">2026-08-23</time></div><p class="portal-summary">重点控制性工程顺利完成关键节点。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">万米领航 创造历史！崇太长江隧道顺利贯通</span><span class="new-label">NEW</span><time class="portal-date">2026-07-30</time></div><p class="portal-summary">盾构机顺利抵达接收井，工程建设取得突破。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">严格监理 护航西十高铁安全优质开通</span><span class="new-label">NEW</span><time class="portal-date">2026-07-01</time></div><p class="portal-summary">新建西安至十堰高速铁路正式通车运营。</p></li>
+        </ul>
+      </article>
+      <article class="portal-card">
+        <div class="portal-card-head"><h2 class="portal-card-title">公告</h2><button class="portal-more">更多 ›</button></div>
+        <ul class="portal-list compact">
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于发布新任职监理公司中层管理人员履职承诺书的通知</span><span class="new-label">NEW</span><time class="portal-date">2026-09-14</time></div><p class="portal-summary">强化公司新任职中层管理人员责任意识、规矩意识和廉洁从业意识。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于转发执行工程建设标准有效目录的通知</span><span class="new-label">NEW</span><time class="portal-date">2026-09-11</time></div><p class="portal-summary">严格落实铁路工程建设技术标准要求。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">关于2026年9月支部主题党日的通知</span><time class="portal-date">2026-09-08</time></div><p class="portal-summary">现将支部主题党日学习内容通知如下。</p></li>
+          <li><div class="portal-list-main"><span class="portal-bullet">•</span><span class="portal-list-title">监理公司2026年8月月度生产例会会议纪要</span><time class="portal-date">2026-09-07</time></div><p class="portal-summary">请各单位抓好会议精神落实。</p></li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="portal-row portal-row-three">
+      <article class="portal-card"><div class="portal-card-head"><h2 class="portal-card-title">友情链接</h2></div><div class="link-list"><a href="#">全国建筑市场监管平台</a><a href="#">全国公路建设市场监督管理查询系统</a><a href="#">铁路监理人员综合管理平台</a><a href="#">中国政府网</a></div></article>
+      <article class="portal-card"><div class="portal-card-head"><h2 class="portal-card-title">快捷入口</h2><button class="portal-more">□</button></div><div class="quick-list"><button class="quick-item"><span class="quick-icon">▣</span>全国标准信息公共服务平台</button><button class="quick-item"><span class="quick-icon">▣</span>铁路技术标准信息服务平台</button></div></article>
+      <article class="portal-card" id="myMailCard"><div class="portal-card-head"><h2 class="portal-card-title"><button class="portal-title-button" id="myMailTitle">我的邮件</button></h2><button class="portal-more" id="myMailMore">更多 ›</button></div><div class="portal-mail-list"><button class="portal-mail-row" data-portal-mail="12"><svg class="icon"><use href="#i-mail"/></svg><span>流程中心</span><span class="portal-mail-subject">请审批京雄城际铁路项目的盖章申请</span><time class="portal-mail-date">2026-09-16</time></button><button class="portal-mail-row" data-portal-mail="1"><svg class="icon"><use href="#i-mail"/></svg><span>王建国</span><span class="portal-mail-subject">关于印发2026年第三季度工作计划的通知</span><time class="portal-mail-date">2026-09-15</time></button><button class="portal-mail-row" data-portal-mail="2"><svg class="icon"><use href="#i-mail"/></svg><span>李明</span><span class="portal-mail-subject">项目现场检查情况反馈</span><time class="portal-mail-date">2026-09-14</time></button><button class="portal-mail-row" data-portal-mail="3"><svg class="icon"><use href="#i-mail"/></svg><span>王芳</span><span class="portal-mail-subject">请确认下周会议安排</span><time class="portal-mail-date">2026-09-14</time></button></div></article>
+    </div>
+  </section>
+
+  <main class="layout is-hidden" id="emailApp">
+    <aside class="sidebar">
+      <h1 class="side-title">我的邮件</h1>
+      <nav class="menu" id="sideMenu" aria-label="邮箱目录">
+        <button class="menu-item" data-view="compose"><svg class="icon"><use href="#i-pen"/></svg>写邮件</button>
+        <button class="menu-item active" data-view="inbox"><svg class="icon"><use href="#i-inbox"/></svg>收件箱 <span class="count" id="inboxCount">8</span></button>
+        <button class="menu-item" data-view="starred"><svg class="icon"><use href="#i-star"/></svg>星标邮件 <span class="count" id="starredCount">3</span></button>
+        <button class="menu-item" data-view="sent"><svg class="icon"><use href="#i-send"/></svg>已发送</button>
+        <button class="menu-item" data-view="drafts"><svg class="icon"><use href="#i-file"/></svg>草稿箱 <span class="count" id="draftCount">2</span></button>
+        <button class="menu-item" data-view="pending"><svg class="icon"><use href="#i-clock"/></svg>待发送 <span class="count" id="pendingCount">1</span></button>
+        <button class="menu-item" data-view="trash"><svg class="icon"><use href="#i-trash"/></svg>回收站</button>
+      </nav>
+      <div class="side-note"><strong>邮件空间</strong>已使用 3.6 GB / 20 GB<br>回收站邮件保留 6 个月</div>
+    </aside>
+    <section class="content-card" id="mainView" aria-live="polite"></section>
+  </main>
+
+  <div class="modal-layer" id="peopleModal" role="dialog" aria-modal="true" aria-labelledby="peopleTitle">
+    <div class="modal wide">
+      <div class="modal-header"><h3 id="peopleTitle">选择收件人</h3><button class="modal-close" data-close="peopleModal" aria-label="关闭">×</button></div>
+      <div class="modal-body">
+        <div class="people-selected"><strong>已选人员：</strong><span class="person-chip">李四 ×</span><span class="person-chip">王五 ×</span><span class="person-chip">赵六 ×</span><span class="person-chip">等45人</span></div>
+        <div class="people-layout">
+          <div class="org-tree">
+            <div class="org-search"><svg class="icon"><use href="#i-search"/></svg><input placeholder="请输入部门名称"></div>
+            <div class="tree-node"><b>⌄</b><strong>中国建铁集团有限公司</strong></div>
+            <div class="tree-node indent">› 总部机关</div><div class="tree-node indent">› 市场经营部</div><div class="tree-node indent">› 工程管理部</div><div class="tree-node indent">› 人力资源部</div><div class="tree-node indent">⌄ 财务管理部</div><div class="tree-node indent active">产品部</div><div class="tree-node indent">采购供应部</div><div class="tree-node indent">安全管理部</div><div class="tree-node indent">综合办公室</div><div class="tree-node">› 华东区域公司</div><div class="tree-node">› 华南区域公司</div><div class="tree-node">› 西南区域公司</div>
+          </div>
+          <div class="people-table">
+            <div class="people-search"><svg class="icon"><use href="#i-search"/></svg><input id="peopleSearch" placeholder="请输入姓名、部门"></div>
+            <table>
+              <thead><tr><th class="check-cell"><input type="checkbox"></th><th>姓名</th><th>部门</th><th>状态</th><th>说明</th></tr></thead>
+              <tbody id="peopleRows">
+                <tr data-key="李四 产品部"><td class="check-cell"><input type="checkbox" checked></td><td>李四</td><td>产品部</td><td>在职</td><td></td></tr>
+                <tr data-key="王五 产品部"><td class="check-cell"><input type="checkbox" checked></td><td>王五</td><td>产品部</td><td>在职</td><td></td></tr>
+                <tr data-key="赵六 工程管理部"><td class="check-cell"><input type="checkbox" checked></td><td>赵六</td><td>工程管理部</td><td>在职</td><td></td></tr>
+                <tr data-key="孙七 产品部"><td class="check-cell"><input type="checkbox"></td><td>孙七</td><td>产品部</td><td>在职</td><td></td></tr>
+                <tr class="disabled" data-key="周八 产品部"><td class="check-cell"><input type="checkbox" disabled></td><td>周八</td><td>产品部</td><td>离职办理中</td><td>不可选择</td></tr>
+                <tr data-key="吴九 市场经营部"><td class="check-cell"><input type="checkbox"></td><td>吴九</td><td>市场经营部</td><td>在职</td><td></td></tr>
+                <tr class="disabled" data-key="张建军 管理员"><td class="check-cell"><input type="checkbox" disabled></td><td>张建军</td><td>综合办公室</td><td>本人</td><td>不可选择</td></tr>
+                <tr data-key="林二 产品部"><td class="check-cell"><input type="checkbox"></td><td>林二</td><td>产品部</td><td>在职</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn" data-close="peopleModal">取消</button><button class="btn btn-primary" id="peopleConfirm">确定</button></div>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal">
+      <div class="modal-header"><h3 id="confirmTitle">发送前确认</h3><button class="modal-close" data-close="confirmModal" aria-label="关闭">×</button></div>
+      <div class="modal-body">
+        <div class="risk-info"><svg class="icon"><use href="#i-info"/></svg><span>发送对象已更新：<strong>42人 → 45人</strong>，新增 4 人，移除 1 人。</span></div>
+        <dl class="confirm-list">
+          <dt>收件人：</dt><dd>李四、王五、赵六等 <span class="clickable" data-open-people="recipient">45人</span>，共 45 人</dd>
+          <dt>抄送人：</dt><dd>钱七、周八等 <span class="clickable" data-open-people="cc">20人</span>，共 20 人</dd>
+          <dt>主　题：</dt><dd id="confirmSubject">关于2026年第三季度工作计划的通知</dd>
+          <dt>附　件：</dt><dd><div class="attachments"><span class="file-chip"><span class="file-icon pdf">PDF</span>第三季度工作计划.pdf（2.3MB） ×</span><span class="file-chip"><span class="file-icon xls">XLS</span>重点任务分解表.xlsx（1.1MB） ×</span></div></dd>
+        </dl>
+        <div class="warning"><span style="color:#f28b00;font-size:20px">●</span>请确认收件人是否正确，避免发送给不相关人员。</div>
+      </div>
+      <div class="modal-footer"><button class="btn" data-close="confirmModal">返回编辑</button><button class="btn btn-primary" id="confirmSend">按最新人员发送</button></div>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="simpleModal" role="dialog" aria-modal="true" aria-labelledby="simpleTitle">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header"><h3 id="simpleTitle">操作确认</h3><button class="modal-close" data-close="simpleModal" aria-label="关闭">×</button></div>
+      <div class="modal-body" id="simpleBody"></div>
+      <div class="modal-footer"><button class="btn" data-close="simpleModal">取消</button><button class="btn btn-primary" id="simpleConfirm">确认</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const icon = id => `<svg class="icon"><use href="#${id}"/></svg>`;
+    const starIcon = filled => `<svg class="icon ${filled?'star':'star-empty'}"><use href="#i-star"/></svg>`;
+    let emails = [
+      {id:12, sender:'流程中心', senderEmail:'workflow@ccec.com', subject:'请审批京雄城际铁路项目的盖章申请', summary:'2026年9月16日 10:20，京雄城际铁路项目发起“项目文件盖章申请”审批流，请审批。', time:'2026-09-16 10:20', unread:true, starred:false, important:false, attachment:false, approval:true, projectName:'京雄城际铁路项目', approvalFlow:'项目文件盖章申请', approvalTime:'2026年9月16日 10:20'},
+      {id:13, sender:'张建军', subject:'张建军撤回了一封邮件', summary:'该邮件已被发件人撤回，正文及附件不可查看。', time:'2026-09-15 10:18', unread:false, starred:false, important:false, attachment:false, recalled:true},
+      {id:1, sender:'王建国', subject:'关于印发2026年第三季度工作计划的通知', summary:'各单位：现将2026年第三季度工作计划印发给你们，请结合实际认真贯彻执行。', time:'2026-09-15 09:30', unread:false, starred:true, important:true, attachment:true},
+      {id:2, sender:'李明', senderEmail:'liming@ccec.com', subject:'回复：项目现场检查情况反馈', summary:'已收悉现场检查整改要求，项目部将于9月20日前完成整改并反馈落实情况。', time:'2026-09-14 16:22', unread:true, starred:false, important:false, attachment:false, replyOriginal:{subject:'项目现场检查情况反馈', sender:'工程管理部', time:'2026-09-13 15:30', body:'上周对北京地铁项目现场检查已完成，现将检查情况及整改要求反馈如下，请项目部按时完成整改。', attachmentCount:1}},
+      {id:3, sender:'王芳', subject:'请确认下周会议安排', summary:'根据工作安排，拟于下周三下午召开项目推进会，请确认参会信息。', time:'2026-09-14 11:06', unread:false, starred:false, important:false, attachment:false},
+      {id:4, sender:'张伟', subject:'关于报送9月份监理月报的要求', summary:'请各项目部按照公司要求，于9月25日前报送本月监理月报。', time:'2026-09-13 17:40', unread:true, starred:false, important:false, attachment:true},
+      {id:5, sender:'刘洋', subject:'2026年安全生产检查工作安排', summary:'为进一步加强安全生产管理，现将2026年度安全检查工作安排通知如下。', time:'2026-09-13 14:20', unread:false, starred:false, important:false, attachment:false},
+      {id:6, sender:'赵敏', subject:'关于工程变更审批流程的调整', summary:'根据最新管理要求，现对工程变更审批流程进行调整，请遵照执行。', time:'2026-09-12 11:36', unread:false, starred:true, important:true, attachment:true},
+      {id:7, sender:'周强', subject:'材料采购合同审核意见', summary:'已完成对XX项目材料采购合同的审核，具体意见详见附件。', time:'2026-09-12 09:18', unread:false, starred:false, important:false, attachment:true},
+      {id:8, sender:'孙丽', subject:'关于组织参加行业技术交流会的通知', summary:'中国建筑业协会将于本月中旬举办技术交流会，请有关人员参加。', time:'2026-09-11 17:03', unread:false, starred:false, important:false, attachment:false},
+      {id:9, sender:'高磊', subject:'项目进度周报（9月第2周）', summary:'现将各项目本周进度情况汇总如下，请审阅。', time:'2026-09-11 15:27', unread:false, starred:true, important:false, attachment:true},
+      {id:10, sender:'陈刚', subject:'办公楼设备维修安排', summary:'本周末将对办公楼空调及供电设备进行检修，请提前做好工作安排。', time:'2026-09-11 10:15', unread:true, starred:false, important:false, attachment:false},
+      {id:11, sender:'马超', subject:'关于开展质量管理培训的通知', summary:'质量管理专题培训定于本周五下午举行，请相关人员准时参加。', time:'2026-09-10 16:42', unread:true, starred:false, important:false, attachment:true}
+    ];
+    let sent = [
+      {to:'李四、王五、赵六等45人', subject:'关于提交第三季度工作总结的通知', summary:'请各部门于本周五前提交第三季度工作总结。', attachment:true, time:'2026-09-15 10:18', readCount:38, unreadCount:7, recalledCount:0},
+      {to:'工程管理部相关人员等18人', subject:'项目检查资料补充说明', summary:'补充说明详见正文及附件。', attachment:true, time:'2026-09-14 14:06', readCount:18, unreadCount:0, recalledCount:0},
+      {to:'孙七、周八等8人', subject:'下周例会安排', summary:'会议时间调整至下周二上午九点。', attachment:false, time:'2026-09-13 09:25', readCount:6, unreadCount:2, recalledCount:0}
+    ];
+    let drafts = [
+      {to:'李四、王五等6人', subject:'关于项目资料归档的补充说明', summary:'请各项目补充提交以下资料……', attachment:true, time:'2026-09-15 08:42'},
+      {to:'未填写收件人', subject:'无主题', summary:'各部门请注意……', attachment:false, time:'2026-09-14 17:20', incomplete:true}
+    ];
+    let pending = [
+      {to:'工程管理部相关人员等18人', subject:'明日安全检查工作提醒', summary:'请相关人员提前准备安全检查资料。', attachment:false, scheduleAt:'2026-11-04 08:30'}
+    ];
+    let trashMails = [
+      {source:'星标邮件', sender:'赵敏', senderEmail:'zhaomin@ccec.com', subject:'关于工程变更审批流程的调整', summary:'根据最新管理要求，现对工程变更审批流程进行调整，请遵照执行。', time:'2026-09-12 11:36', deletedTime:'2026-09-14 12:06', starred:true, attachment:true},
+      {source:'收件箱', sender:'陈刚', senderEmail:'chengang@ccec.com', subject:'办公楼设备维修安排', summary:'本周末将对办公楼空调及供电设备进行检修，请提前做好工作安排。', time:'2026-09-11 10:15', deletedTime:'2026-09-13 09:40', starred:false, attachment:false},
+      {source:'草稿箱', sender:'张建军', senderEmail:'zhangjj@ccec.com', subject:'无主题', summary:'各部门请注意……', time:'2026-09-12 18:30', deletedTime:'2026-09-12 18:30', starred:false, attachment:false}
+    ];
+    let currentView = 'inbox';
+    let composeContext = null;
+    let pendingSendMail = null;
+    let nextMailId = 100;
+    const listState = { query:'', sort:'desc', page:1, pageSize:20, filters:{ sender:'', attachment:'', status:'all' } };
+    let currentPersonType = 'recipient';
+    let mailOpened = false;
+    let toastTimer;
+    let simpleConfirmAction = null;
+    const mainView = document.getElementById('mainView');
+    const portalDashboard = document.getElementById('portalDashboard');
+    const emailApp = document.getElementById('emailApp');
+    const portalTab = document.getElementById('portalTab');
+    const mailTab = document.getElementById('mailTab');
+
+    function setActive(view) {
+      document.querySelectorAll('.menu-item').forEach(x => x.classList.toggle('active', x.dataset.view === view));
+    }
+    function titleFor(view) {
+      return {inbox:'收件箱', starred:'星标邮件', sent:'已发送', drafts:'草稿箱', pending:'待发送', trash:'回收站'}[view] || '收件箱';
+    }
+    function showToast(message) {
+      const t = document.getElementById('toast');
+      t.textContent = message; t.classList.add('show'); clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+    }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openSimpleDialog(title, body, options={}) {
+      document.getElementById('simpleTitle').textContent = title;
+      document.getElementById('simpleBody').innerHTML = body;
+      const confirm = document.getElementById('simpleConfirm');
+      confirm.textContent = options.confirmText || '确认';
+      confirm.style.display = options.hideConfirm ? 'none' : '';
+      confirm.className = options.danger ? 'btn btn-danger' : 'btn btn-primary';
+      simpleConfirmAction = options.onConfirm || null;
+      openModal('simpleModal');
+    }
+    function sentReadSummary(mail) {
+      const parts = [`已读${mail.readCount}`, `未读${mail.unreadCount}`];
+      if (mail.recalledCount) parts.push(`已撤回${mail.recalledCount}`);
+      return parts.join(' / ');
+    }
+    function nowText() { return new Date().toISOString().slice(0,16).replace('T',' '); }
+    function folderLabel(kind) { return {inbox:'收件箱', sent:'已发送', drafts:'草稿箱', pending:'待发送'}[kind] || '收件箱'; }
+    function updateCounts() {
+      const unread = emails.filter(x=>x.unread).length;
+      const starred = emails.filter(x=>x.starred).length + sent.filter(x=>x.starred).length;
+      const setCount = (id, value) => { const el=document.getElementById(id); if (!el) return; el.textContent=value; el.hidden=value===0; };
+      document.getElementById('topBadge').textContent = unread;
+      setCount('inboxCount', unread);
+      setCount('starredCount', starred);
+      setCount('draftCount', drafts.length);
+      setCount('pendingCount', pending.length);
+    }
+    function moveToTrash(kind, index) {
+      const collections = {inbox:emails, sent, drafts, pending};
+      const collection = collections[kind];
+      const [mail] = collection.splice(index, 1);
+      if (!mail) return;
+      trashMails.unshift({ ...mail, source:folderLabel(kind), originKind:kind, originalMail:{...mail}, deletedTime:nowText(), sender:mail.sender || '张建军' });
+      updateCounts();
+    }
+    function restoreFromTrash(index) {
+      const [record] = trashMails.splice(index, 1);
+      if (!record) return;
+      const kind = record.originKind || (record.source==='已发送' ? 'sent' : record.source==='草稿箱' ? 'drafts' : record.source==='待发送' ? 'pending' : 'inbox');
+      const restored = {...(record.originalMail || record)};
+      delete restored.source; delete restored.originKind; delete restored.originalMail; delete restored.deletedTime;
+      if (kind==='inbox') emails.unshift(restored);
+      else if (kind==='sent') sent.unshift(restored);
+      else if (kind==='drafts') drafts.unshift(restored);
+      else if (kind==='pending') pending.unshift(restored);
+      updateCounts();
+    }
+    function openRecall(index, returnToDetail=false, returnView='sent') {
+      const mail = sent[index];
+      if (!mail || mail.unreadCount === 0) {
+        const message = mail && mail.recalledCount
+          ? `该邮件已向 ${mail.recalledCount} 名未读收件人撤回，其余 ${mail.readCount} 名收件人已读，原邮件继续保留。`
+          : '该邮件的收件人均已阅读，不能撤回。';
+        openSimpleDialog('无法撤回', `<p>${message}</p><p style="color:#70849c">邮件撤回仅对未读收件人生效。</p>`, {confirmText:'关闭', onConfirm:()=>{}});
+        return;
+      }
+      const recallCount = mail.unreadCount;
+      openSimpleDialog('撤回邮件', `<p>确定撤回“${mail.subject}”吗？</p><p>本次可从 <strong>${recallCount}</strong> 名未读收件人的收件箱中撤回；${mail.readCount} 名已读收件人仍将保留原邮件。</p><p style="color:#70849c">撤回成功后，收件人侧会保留“张建军撤回了一封邮件”的提示记录。</p>`, {
+        confirmText:'确认撤回',
+        danger:true,
+        onConfirm:()=>{
+          mail.recalledCount += recallCount;
+          mail.unreadCount = 0;
+          if (returnToDetail) renderDetail(mail, true, index, false, returnView);
+          else renderSpecialList('sent');
+          showToast(`已向${recallCount}名未读收件人撤回，${mail.readCount}名已读收件人保留原邮件`);
+        }
+      });
+    }
+
+    function listRecords(view) {
+      const inbox = emails.map((mail,index)=>({mail, kind:'inbox', index}));
+      if (view === 'starred') return [...inbox.filter(x=>x.mail.starred), ...sent.map((mail,index)=>({mail, kind:'sent', index})).filter(x=>x.mail.starred)];
+      return inbox;
+    }
+    function filteredRecords(view) {
+      const state = listState;
+      const query = state.query.toLowerCase();
+      let records = listRecords(view).filter(({mail})=>{
+        const text = [mail.sender,mail.to,mail.subject,mail.summary].filter(Boolean).join(' ').toLowerCase();
+        if (query && !text.includes(query)) return false;
+        if (state.filters.sender && !String(mail.sender || mail.to || '').toLowerCase().includes(state.filters.sender.toLowerCase())) return false;
+        if (state.filters.attachment==='yes' && !mail.attachment) return false;
+        if (state.filters.attachment==='no' && mail.attachment) return false;
+        if (state.filters.status==='unread' && (!mail.unread || !mail.sender)) return false;
+        if (state.filters.status==='read' && mail.unread) return false;
+        return true;
+      });
+      return records.sort((a,b)=>listState.sort==='desc' ? String(b.mail.time||'').localeCompare(String(a.mail.time||'')) : String(a.mail.time||'').localeCompare(String(b.mail.time||'')));
+    }
+
+    function renderList(view='inbox') {
+      currentView = view; setActive(view);
+      if (['sent','drafts','pending','trash'].includes(view)) return renderSpecialList(view);
+      const allRecords = filteredRecords(view);
+      const total = allRecords.length;
+      const pages = Math.max(1, Math.ceil(total / listState.pageSize));
+      if (listState.page > pages) listState.page = pages;
+      const records = allRecords.slice((listState.page-1)*listState.pageSize, listState.page*listState.pageSize);
+      const rows = records.map(({mail:m,kind,index}) => `
+        <tr data-record-kind="${kind}" data-record-index="${index}" class="${m.recalled?'recalled-row':''}">
+          <td class="check-cell"><input type="checkbox" class="row-check" aria-label="选择邮件" onclick="event.stopPropagation()"></td>
+          <td class="status-cell">${m.recalled?'<span class="recalled-symbol" title="邮件已撤回">↶</span>':`<span class="status-dot ${kind==='inbox'&&m.unread?'unread':'read'}" title="${kind==='inbox'&&m.unread?'未读':'已读'}"></span>`}</td>
+          <td class="sender-cell">${kind==='sent' ? `我 → ${m.to}` : m.sender}</td>
+          <td class="subject-cell"><div class="subject-line"><span class="mail-subject">${m.subject}</span>${m.recalled?'<span class="recalled-mark">已撤回</span>':m.important?'<span class="important">重要</span>':''}</div></td>
+          <td><div class="mail-summary">${m.summary}</div></td>
+          <td class="attach-cell">${m.recalled?'—':m.attachment?icon('i-paperclip'):''}</td>
+          <td class="time-cell">${m.time}</td>
+        </tr>`).join('');
+      mainView.innerHTML = `
+        <div class="content-header"><div class="page-title">${titleFor(view)}</div><div class="mail-total">共 ${total} 封邮件</div></div>
+        <div class="toolbar">
+          <div class="search-box">${icon('i-search')}<input id="mailSearch" placeholder="请输入发件人、主题或关键词"></div>
+          <button class="btn btn-primary" id="searchBtn">搜索</button>
+          <span class="toolbar-spacer"></span>
+          <button class="btn" id="refreshBtn">${icon('i-refresh')}刷新</button>
+          <button class="btn" id="advancedBtn">${icon('i-filter')}高级搜索</button>
+          <button class="btn" id="sortBtn">${icon('i-sort')}时间倒序</button>
+          ${view==='starred' ? '' : '<button class="btn" id="markReadBtn">全部标为已读</button>'}
+        </div>
+        <div class="advanced-panel" id="advancedPanel">
+          <div class="field"><label>发件人</label><input id="filterSender" value="${listState.filters.sender}" placeholder="姓名或部门"></div><div class="field"><label>时间范围</label><select><option>全部时间</option><option>最近7天</option><option>最近30天</option></select></div><div class="field"><label>附件</label><select id="filterAttachment"><option value="all">不限</option><option value="yes" ${listState.filters.attachment==='yes'?'selected':''}>有附件</option><option value="no" ${listState.filters.attachment==='no'?'selected':''}>无附件</option></select></div><div class="field"><label>状态</label><select id="filterStatus"><option value="all">全部状态</option><option value="unread" ${listState.filters.status==='unread'?'selected':''}>未读</option><option value="read" ${listState.filters.status==='read'?'selected':''}>已读</option></select></div><button class="btn btn-primary" id="advancedSearchBtn">查询</button>
+        </div>
+        <div class="new-mail-tip" id="newMailTip">有 2 封新邮件，点击查看</div>
+        <div class="table-wrap">
+          <table><thead><tr><th class="check-cell"><input type="checkbox" id="checkAll" aria-label="全选当前页"></th><th class="status-cell">状态</th><th class="sender-cell">发件人</th><th class="subject-cell">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th class="time-cell">时间 ↕</th></tr></thead><tbody id="mailRows">${rows || `<tr><td colspan="7"><div class="empty">没有符合条件的邮件</div></td></tr>`}</tbody></table>
+        </div>
+        <div class="footer-bar"><div class="page-size">每页 <select id="pageSize"><option ${listState.pageSize===20?'selected':''}>20</option><option ${listState.pageSize===50?'selected':''}>50</option><option ${listState.pageSize===100?'selected':''}>100</option></select> 条，共 ${total} 条</div><div class="pagination"><button class="page-btn" data-page="${Math.max(1,listState.page-1)}">‹</button>${Array.from({length:pages},(_,i)=>`<button class="page-btn ${i+1===listState.page?'active':''}" data-page="${i+1}">${i+1}</button>`).join('')}<button class="page-btn" data-page="${Math.min(pages,listState.page+1)}">›</button></div></div>`;
+      bindListEvents(view, records);
+    }
+
+    function renderSpecialList(view) {
+      let header = '', rows = '', total = 0;
+      if (view === 'sent') {
+        total = sent.length;
+        header = '<tr><th class="check-cell"><input type="checkbox"></th><th style="width:225px">收件人</th><th style="width:300px">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th style="width:190px">阅读情况</th><th class="time-cell">发送时间</th><th style="width:92px">操作</th></tr>';
+        rows = sent.map((m,i)=>`<tr data-sent="${i}"><td class="check-cell"><input type="checkbox" onclick="event.stopPropagation()"></td><td>${m.to}</td><td><span class="mail-subject">${m.subject}</span></td><td><div class="mail-summary">${m.summary}</div></td><td class="attach-cell">${m.attachment?icon('i-paperclip'):''}</td><td><button class="btn-link read-detail" data-sent-index="${i}" onclick="event.stopPropagation()">${sentReadSummary(m)}</button></td><td class="time-cell">${m.time}</td><td><button class="btn-link ${m.unreadCount?'btn-danger':''}" data-action="recall" data-sent-index="${i}" ${m.unreadCount?'':'disabled'}>${m.recalledCount?'已撤回':m.unreadCount?'撤回':'不可撤回'}</button></td></tr>`).join('');
+      } else if (view === 'drafts') {
+        total = drafts.length; header = '<tr><th class="check-cell"><input type="checkbox" id="checkAllDrafts" aria-label="全选草稿"></th><th style="width:280px">收件人</th><th style="width:360px">主题</th><th>正文摘要</th><th class="attach-cell">附件</th><th class="time-cell">保存时间</th></tr>';
+        rows = drafts.map((m,i)=>`<tr data-compose="1"><td class="check-cell"><input type="checkbox" class="draft-check" data-draft-index="${i}" aria-label="选择草稿" onclick="event.stopPropagation()"></td><td ${m.incomplete?'style="color:#8b9aab"':''}>${m.to}</td><td ${m.incomplete?'style="color:#8b9aab"':''}>${m.subject}</td><td><div class="mail-summary">${m.summary}</div></td><td class="attach-cell">${m.attachment?icon('i-paperclip'):''}</td><td class="time-cell">${m.time}</td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">草稿箱为空</div></td></tr>';
+      } else if (view === 'pending') {
+        total = pending.length; header = '<tr><th class="check-cell"><input type="checkbox"></th><th style="width:270px">收件人</th><th style="width:360px">主题</th><th>状态</th><th class="time-cell">计划发送时间</th><th style="width:235px">操作</th></tr>';
+        rows = pending.map((m,i)=>`<tr><td class="check-cell"><input type="checkbox" onclick="event.stopPropagation()"></td><td>${m.to}</td><td>${m.subject}</td><td><span style="color:#b37700">等待发送</span></td><td class="time-cell">${m.scheduleAt}</td><td><button class="btn-link" data-action="edit-pending" data-index="${i}">编辑</button><button class="btn-link" data-action="send-now" data-index="${i}">立即发送</button><button class="btn-link btn-danger" data-action="cancel-schedule" data-index="${i}">取消定时</button></td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">待发送邮件为空</div></td></tr>';
+      } else {
+        total = trashMails.length; header = '<tr><th class="check-cell"><input type="checkbox"></th><th style="width:130px">来源</th><th style="width:180px">发件人/收件人</th><th>主题</th><th class="time-cell">删除时间</th><th style="width:165px">操作</th></tr>';
+        rows = trashMails.map((m,i)=>`<tr data-trash="${i}"><td class="check-cell"><input type="checkbox" onclick="event.stopPropagation()"></td><td>${m.source}</td><td>${m.sender || m.to || '张建军'}</td><td><span class="mail-subject">${m.subject}</span></td><td class="time-cell">${m.deletedTime}</td><td><button class="btn-link" data-action="restore" data-index="${i}">恢复</button><button class="btn-link btn-danger" data-action="purge" data-index="${i}">彻底删除</button></td></tr>`).join('') || '<tr><td colspan="6"><div class="empty">回收站为空</div></td></tr>';
+      }
+      mainView.innerHTML = `<div class="content-header"><div class="page-title">${titleFor(view)}</div><div class="mail-total">共 ${total} 封邮件</div></div><div class="toolbar"><div class="search-box">${icon('i-search')}<input id="specialSearch" placeholder="请输入主题或关键词"></div><button class="btn btn-primary" id="specialSearchBtn">搜索</button><span class="toolbar-spacer"></span><button class="btn" id="specialRefreshBtn">${icon('i-refresh')}刷新</button>${view==='drafts'?'<button class="btn btn-danger" id="bulkDeleteDrafts" disabled>批量删除</button>':''}</div><div class="table-wrap"><table><thead>${header}</thead><tbody>${rows}</tbody></table></div><div class="footer-bar"><div class="page-size">每页 20 条，共 ${total} 条</div><div class="pagination"><button class="page-btn active">1</button></div></div>`;
+      mainView.querySelectorAll('[data-sent]').forEach(r => r.addEventListener('click', ()=>renderDetail(sent[Number(r.dataset.sent)], true, Number(r.dataset.sent), false, 'sent')));
+      mainView.querySelectorAll('[data-trash]').forEach(r => r.addEventListener('click', ()=>renderDetail(trashMails[Number(r.dataset.trash)], false, -1, true)));
+      mainView.querySelectorAll('[data-compose]').forEach(r => r.addEventListener('click', ()=>renderCompose(drafts[Number(r.querySelector('.draft-check')?.dataset.draftIndex)], {kind:'drafts', index:Number(r.querySelector('.draft-check')?.dataset.draftIndex)})));
+      mainView.querySelectorAll('[data-action]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); handleAction(b.dataset.action, Number(b.dataset.index ?? b.dataset.sentIndex)); }));
+      mainView.querySelectorAll('.read-detail').forEach(b => b.addEventListener('click', ()=>{ const m=sent[Number(b.dataset.sentIndex)]; openSimpleDialog('阅读与撤回情况', `<p>已读 ${m.readCount} 人，未读 ${m.unreadCount} 人${m.recalledCount?`，已撤回 ${m.recalledCount} 人`:''}。</p><p style="color:#70849c">撤回仅对未读收件人生效；已读人员继续保留原邮件。</p>`, {confirmText:'关闭', onConfirm:()=>{}}); }));
+      const specialSearch = document.getElementById('specialSearch');
+      const runSpecialSearch = () => { const key=specialSearch.value.trim().toLowerCase(); mainView.querySelectorAll('tbody tr').forEach(row=>row.style.display=!key||row.textContent.toLowerCase().includes(key)?'':'none'); };
+      specialSearch.addEventListener('keydown',e=>{if(e.key==='Enter')runSpecialSearch();});
+      document.getElementById('specialSearchBtn').addEventListener('click',runSpecialSearch);
+      document.getElementById('specialRefreshBtn').addEventListener('click',()=>{specialSearch.value='';runSpecialSearch();showToast('邮件列表已刷新');});
+      if (view === 'drafts') {
+        const checks = [...mainView.querySelectorAll('.draft-check')];
+        const selectAll = document.getElementById('checkAllDrafts');
+        const bulkDelete = document.getElementById('bulkDeleteDrafts');
+        const updateDraftSelection = () => {
+          const selected = checks.filter(x=>x.checked);
+          bulkDelete.disabled = selected.length === 0;
+          if (selectAll) selectAll.checked = checks.length > 0 && selected.length === checks.length;
+        };
+        selectAll?.addEventListener('change', e=>{checks.forEach(x=>x.checked=e.target.checked); updateDraftSelection();});
+        checks.forEach(x=>x.addEventListener('change', updateDraftSelection));
+        bulkDelete?.addEventListener('click', ()=>{
+          const selected = checks.filter(x=>x.checked).map(x=>Number(x.dataset.draftIndex));
+          if (!selected.length) return;
+          openSimpleDialog('批量删除草稿', `<p>确定将选中的 <strong>${selected.length}</strong> 封草稿移入回收站吗？</p>`, {danger:true, confirmText:'确认删除', onConfirm:()=>{
+            selected.sort((a,b)=>b-a).forEach(index=>moveToTrash('drafts', index));
+            renderSpecialList('drafts');
+            showToast(`${selected.length}封草稿已移入回收站`);
+          }});
+        });
+      }
+    }
+
+    function bindListEvents(view, records) {
+      document.querySelectorAll('[data-record-kind]').forEach(row => row.addEventListener('click', () => {
+        const kind = row.dataset.recordKind, index = Number(row.dataset.recordIndex);
+        const mail = kind==='sent' ? sent[index] : emails[index];
+        if (kind==='inbox') { mail.unread = false; updateCounts(); }
+        renderDetail(mail, kind==='sent', index, false, view);
+      }));
+      document.getElementById('advancedBtn').addEventListener('click', ()=>document.getElementById('advancedPanel').classList.toggle('open'));
+      document.getElementById('refreshBtn').addEventListener('click', ()=>{showToast('邮件列表已刷新'); document.getElementById('newMailTip').style.display='flex';});
+      document.getElementById('newMailTip').addEventListener('click', e=>{e.currentTarget.style.display='none'; showToast('已加载 2 封新邮件');});
+      document.getElementById('markReadBtn')?.addEventListener('click', ()=>{records.filter(x=>x.kind==='inbox').forEach(x=>x.mail.unread=false); updateCounts(); renderList(currentView); showToast('已将当前列表邮件标为已读');});
+      document.getElementById('checkAll').addEventListener('change', e=>document.querySelectorAll('.row-check').forEach(x=>x.checked=e.target.checked));
+      const search = document.getElementById('mailSearch');
+      const runSearch = () => { listState.query = search.value.trim(); listState.page=1; renderList(view); };
+      search.value=listState.query; search.addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();}); document.getElementById('searchBtn').addEventListener('click', runSearch);
+      document.getElementById('advancedSearchBtn').addEventListener('click', ()=>{ listState.filters.sender=document.getElementById('filterSender').value.trim(); listState.filters.attachment=document.getElementById('filterAttachment').value; listState.filters.status=document.getElementById('filterStatus').value; listState.page=1; renderList(view); showToast('高级筛选已生效'); });
+      document.getElementById('sortBtn').addEventListener('click', ()=>{listState.sort=listState.sort==='desc'?'asc':'desc'; renderList(view);});
+      document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{listState.page=Number(b.dataset.page); renderList(view);}));
+      document.getElementById('pageSize').addEventListener('change',e=>{listState.pageSize=Number(e.target.value); listState.page=1; renderList(view);});
+    }
+
+    function renderCompose(mail=null, context=null) {
+      currentView='compose'; setActive('compose');
+      composeContext = context;
+      const editingMail = mail || {to:'李四、王五、赵六等45人', subject:'关于2026年第三季度工作计划的通知', summary:'各部门、各单位：为进一步落实公司2026年度经营管理目标，请结合实际认真贯彻执行。', attachment:true};
+      mainView.innerHTML = `
+        <div class="content-header"><div class="page-title">写邮件</div><div class="mail-total">仅支持发送给企业内部人员</div></div>
+        <div class="compose">
+          <div class="form-row"><label class="form-label">收件人 <span class="required">*</span></label><div class="input-shell" id="toChips"><span class="person-chip">李四 <button>×</button></span><span class="person-chip">王五 <button>×</button></span><span class="person-chip">赵六 <button>×</button></span><span class="person-chip">等45人</span><input aria-label="收件人"></div><button class="btn-link choose-people" data-type="recipient">${icon('i-user')}选择人员</button></div>
           <div class="form-row"><label class="form-label">抄送</label><div class="input-shell" id="ccChips"><span class="person-chip">钱七 <button>×</button></span><span class="person-chip">周八 <button>×</button></span><span class="person-chip">等20人</span><input aria-label="抄送人"></div><button class="btn-link choose-people" data-type="cc">${icon('i-users')}选择人员</button></div>
           <div class="form-row"><label class="form-label">主题</label><input class="subject-input" id="subjectInput" value="${editingMail.subject || ''}"><button class="btn-link" id="importantBtn">○ 标记重要</button></div>
           <div class="form-row"><label class="form-label">正文 <span class="required">*</span></label><div class="editor"><div class="editor-toolbar"><button class="editor-tool"><b>B</b></button><button class="editor-tool"><i>I</i></button><button class="editor-tool">U̲</button><button class="editor-tool">字体 ▾</button><button class="editor-tool">14 ▾</button><button class="editor-tool">☰</button><button class="editor-tool">☷</button><button class="editor-tool">${icon('i-paperclip')}</button><button class="btn-link" id="insertImage">插入图片</button></div><div class="editor-area" id="editorArea" contenteditable="true">${editingMail.summary || ''}</div></div><span></span></div>
